@@ -1,0 +1,25 @@
+services:
+  finances-ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finances_ai_service
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET=${MINIO_BUCKET}
+      - AI_SERVICE_URL=${AI_SERVICE_URL}
+      - INTERNAL_API_SECRET=${INTERNAL_API_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LLM_PROVIDER=${LLM_PROVIDER}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+      - NODE_BACKEND_URL=${NODE_BACKEND_URL:-http://backend:3000}
+    depends_on:
+      - postgres
+      - minio
+    ports:
+      - "8001:8001"
