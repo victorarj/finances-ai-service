@@ -1,0 +1,29 @@
+services:
+  finances-ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finances_ai_service
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL_DOCKER:-postgresql+asyncpg://admin:admin123@host.docker.internal:5435/empresa}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT_DOCKER:-http://host.docker.internal:9000}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - MINIO_BUCKET=${MINIO_BUCKET:-documents}
+      - AI_SERVICE_URL=${AI_SERVICE_URL_DOCKER:-http://localhost:8001}
+      - INTERNAL_API_SECRET=${INTERNAL_API_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL_DOCKER:-http://host.docker.internal:11434}
+      - NODE_BACKEND_URL=${NODE_BACKEND_URL_DOCKER:-http://host.docker.internal:3000}
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true

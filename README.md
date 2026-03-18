@@ -36,6 +36,21 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8001
 ```
 
+## Docker Dev Workflow
+
+To run the AI service in its own development container:
+
+```bash
+docker compose up --build
+```
+
+This starts the service with `uvicorn --reload` on `http://localhost:8001`.
+
+Notes:
+- The container reads [`.env`](/c:/Users/msvic/Documents/finances-ai-service/.env).
+- `*_DOCKER` variables are used for container-to-host communication, so the AI container can reach the backend on `http://host.docker.internal:3000` and shared infra exposed by the `finances/` repo.
+- Logs stay attached to the terminal running `docker compose up`.
+
 ## Docker run
 
 This repo is designed to be combined with the existing `finances` stack:

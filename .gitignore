@@ -21,6 +21,7 @@ pids
 e2e-*.pdf
 e2e-*.html
 .pytest_cache/
+.env
 __pycache__/
 *.pyc
 
